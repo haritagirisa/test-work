@@ -1,0 +1,25 @@
+def get_value(obj, key):
+    keys = key.split('/')
+    for k in keys:
+        obj = obj.get(k)
+        if obj is None:
+            return None
+    return obj
+
+Sample outputs:
+
+obj1 = {'a': {'b': {'c': 'd'}}}
+key1 = 'a/b/c'
+value1 = get_value(obj1, key1) # returns 'd'
+
+obj2 = {'x': {'y': {'z': 'a'}}}
+key2 = 'x/y/z'
+value2 = get_value(obj2, key2) # returns 'a'
+
+obj3 = {'foo': 'bar'}
+key3 = 'foo'
+value3 = get_value(obj3, key3) # returns 'bar'
+
+obj4 = {'a': {'b': {'c': {'d': {'e': 'f'}}}}}
+key4 = 'a/b/c/d/e'
+value4 = get_value(obj4, key4) # returns 'f'

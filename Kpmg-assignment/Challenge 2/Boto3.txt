@@ -1,0 +1,51 @@
+We can use the AWS EC2 metadata service to retrieve the metadata of an instance.
+ 
+The example Python code that retrieves the metadata of an instance and formats it as JSON:
+
+import requests
+import json
+
+metadata_url = "http://169.254.169.254/latest/meta-data/"
+
+def get_metadata():
+    metadata = {}
+    # retrieve instance id
+    instance_id = requests.get(metadata_url + "instance-id").text
+    metadata["InstanceId"] = instance_id
+    
+    # retrieve instance type
+    instance_type = requests.get(metadata_url + "instance-type").text
+    metadata["InstanceType"] = instance_type
+    
+    # retrieve availability zone
+    availability_zone = requests.get(metadata_url + "placement/availability-zone").text
+    metadata["AvailabilityZone"] = availability_zone
+    
+    # retrieve public IP
+    public_ip = requests.get(metadata_url + "public-ipv4").text
+    metadata["PublicIp"] = public_ip
+    
+    # retrieve private IP
+    private_ip = requests.get(metadata_url + "local-ipv4").text
+    metadata["PrivateIp"] = private_ip
+    
+    # retrieve hostname
+    hostname = requests.get(metadata_url + "hostname").text
+    metadata["Hostname"] = hostname
+    
+    # retrieve IAM role
+    iam_role = requests.get(metadata_url + "iam/security-credentials/").text
+    if iam_role:
+        iam_role = requests.get(metadata_url + "iam/security-credentials/" + iam_role).json()
+        metadata["IAMRole"] = iam_role
+    
+    return metadata
+
+# convert metadata to JSON
+metadata_json = json.dumps(get_metadata())
+
+# print JSON formatted output
+print(metadata_json)
+
+This code retrieves the instance ID, instance type, availability zone, public IP, private IP, hostname, and IAM role (if present) using the EC2 metadata service. 
+It then converts the metadata to a JSON formatted string using the json.dumps() function and prints the output to the console
